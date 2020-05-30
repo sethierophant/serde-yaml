@@ -29,6 +29,62 @@ where
 }
 
 #[test]
+fn test_empty() {
+    let yaml = unindent(
+        "
+        ---
+        # This is an empty YAML file.
+        ",
+    );
+    let expected = ();
+    test_de(&yaml, &expected);
+}
+
+#[test]
+fn test_empty_no_start() {
+    let yaml = unindent(
+        "
+        # This is an empty YAML file.
+        ",
+    );
+    let expected = ();
+    test_de(&yaml, &expected);
+}
+
+#[test]
+fn test_empty_default() {
+    #[derive(Deserialize, PartialEq, Debug)]
+    struct Data {
+        #[serde(default)]
+        a: bool,
+    }
+    let yaml = unindent(
+        "
+        ---
+        # This is an empty YAML file.
+        ",
+    );
+    let expected = Data { a: bool::default() };
+    test_de(&yaml, &expected);
+}
+
+#[test]
+fn test_empty_default_no_start() {
+    #[derive(Deserialize, PartialEq, Debug)]
+    struct Data {
+        #[serde(default)]
+        a: bool,
+    }
+    let yaml = unindent(
+        "
+        # This is an empty YAML file.
+        ",
+    );
+    let expected = Data { a: bool::default() };
+    test_de(&yaml, &expected);
+}
+
+#[test]
 fn test_alias() {
     let yaml = unindent(
         "
